@@ -42,7 +42,6 @@ public class MainActivityViewModel extends AndroidViewModel {
             //lo envuelvo en el object
             ObjectInputStream ois = new ObjectInputStream(bis);
 
-            while (true) {
                 try {
                     Usuario usu = (Usuario) ois.readObject();
                     String email = usu.getMail();
@@ -59,27 +58,14 @@ public class MainActivityViewModel extends AndroidViewModel {
                     }
                 } catch (EOFException eof) {
                     fis.close();
-                    break;
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                    Toast.makeText(context, "No se encontró un objeto de esa clase", Toast.LENGTH_LONG).show();
                 }
-            }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            Toast.makeText(context, "Error de entrada/salida", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "No se encontró el archivo", Toast.LENGTH_LONG).show();
             return;
-        }
-    }
-
-    private class ObjetosPropios extends ObjectOutputStream {
-        ObjetosPropios() throws IOException {
-            super();
-        }
-        ObjetosPropios(OutputStream o) throws IOException{
-            super(o);
-        }
-        public void writeStreamHeader() throws IOException{
+        } catch (IOException e) {
+            Toast.makeText(context, "Error de entrada/salida", Toast.LENGTH_LONG).show();
             return;
         }
     }
